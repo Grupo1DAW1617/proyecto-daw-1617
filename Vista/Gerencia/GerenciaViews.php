@@ -1155,13 +1155,13 @@ abstract class GerenciaViews extends \Vista\Plantilla\Views{
                     <div class="form-group">
                         <label class="control-label col-sm-2 col-md-2">Tipo de Horario Genérico:</label>
                         <div class="col-sm-4 col-md-3">
-                            <input class="form-control" type="text" name="tipo" placeholder="Mañana, tarde, noche...">
+                            <input class="form-control" type="text" name="tipo" placeholder="Mañana, tarde, noche..." required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-2 col-md-2">Precio:</label>
                         <div class="col-sm-4 col-md-3">
-                            <input class="form-control" type="text" name="precio" placeholder="20.15">
+                            <input class="form-control" type="text" name="precio" placeholder="20.15" required>
                             </div>
                     </div>
                     </fieldset>
