@@ -18,7 +18,6 @@ abstract class HorarioTrabajadorBD extends GenericoBD{
     public static function getHorarioTrabajadorByTrabajador($trabajador){
 
         $conexion=parent::conectar();
-        var_dump($trabajador);die();
         $query="SELECT * FROM ".self::$tabla." WHERE dniTrabajador='".$trabajador->getDni()."'";
         $rs=mysqli_query($conexion,$query) or die(mysqli_error($conexion));
         $respuesta=parent::mapear($rs,"HorarioTrabajador");
@@ -66,6 +65,7 @@ abstract class HorarioTrabajadorBD extends GenericoBD{
     }
 
     public static function getAll($trabajador = null){
+
         $con = parent::conectar();
 
         if (is_null($trabajador))
@@ -78,6 +78,8 @@ abstract class HorarioTrabajadorBD extends GenericoBD{
         }
 
         $rs = mysqli_query($con, $query) or die("Error getAll horariosTrabajador");
+
+        echo $query;
 
         $horarioTrabajador = parent::mapearArray($rs, "HorarioTrabajador");
 
@@ -154,7 +156,6 @@ abstract class HorarioTrabajadorBD extends GenericoBD{
         $con = parent::conectar();
 
         $query = "DELETE FROM ".self::$tabla." WHERE id= ".$id.";";
-        var_dump($query);
 
         mysqli_query($con, $query) or die("Error delete horarioTrabajador");
 
@@ -175,7 +176,7 @@ abstract class HorarioTrabajadorBD extends GenericoBD{
     public static function checkIncidencias($dni,$semana,$calendario){ //Ibai
         $con= parent::conectar();
         $incidencias = false;
-        if(count($semana)<2)
+        if(strlen($semana)<2)
             $semana = "0".$semana;
         //Primer dia de la semana
         $date1 = date( 'Y-m-d', strtotime($calendario."W".$semana."1") );

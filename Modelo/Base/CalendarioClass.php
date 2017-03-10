@@ -11,7 +11,7 @@ namespace Modelo\Base;
 use Modelo\BD;
 
 require_once __DIR__."/../BD/CalendarioBD.php";
-require_once __DIR__."/../BD/CalendarioBD-copia.php";
+//require_once __DIR__."/../BD/CalendarioBD-copia.php";
 class Calendario{
 
     private $id;

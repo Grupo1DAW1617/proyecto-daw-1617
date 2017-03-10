@@ -1,7 +1,10 @@
 <?php
 namespace Vista\Plantilla;
 
-session_start();
+if(session_status() !=2){
+    session_start();
+}
+
 
 class Views
 {

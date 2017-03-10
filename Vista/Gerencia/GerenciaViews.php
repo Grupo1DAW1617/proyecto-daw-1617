@@ -36,13 +36,13 @@ abstract class GerenciaViews extends \Vista\Plantilla\Views{
                 <a href="<?php echo self::getUrlRaiz()?>/Vista/Gerencia/deleteCentro.php"><span class="glyphicon glyphicon-eye-open" style="font-size: 24px; color: black;"></a>
             </h3>
 			<h3 class="page-header">Tipo Franja
-                <a href="<?php echo self::getUrlRaiz()?>/Vista/Administracion/insertTipoFranja.php"><span src="" class="glyphicon glyphicon-plus" style="font-size: 24px; color: green;"></span></a>
-                <a href="<?php echo self::getUrlRaiz()?>/Vista/Administracion/deleteTipoFranja.php"><span class="glyphicon glyphicon-eye-open" style="font-size: 24px; color: black;"></span></a>
+                <a href="<?php echo self::getUrlRaiz()?>/Vista/Gerencia/insertTipoFranja.php"><span src="" class="glyphicon glyphicon-plus" style="font-size: 24px; color: green;"></span></a>
+                <a href="<?php echo self::getUrlRaiz()?>/Vista/Gerencia/deleteTipoFranja.php"><span class="glyphicon glyphicon-eye-open" style="font-size: 24px; color: black;"></span></a>
                 
             </h3>
             <h3 class="page-header">Horarios
-                <a href="<?php echo self::getUrlRaiz()?>/Vista/Gerencia/insertTipoFranja.php"><span class="glyphicon glyphicon-plus" style="font-size: 24px; color: green;"></a>
-                <a href="<?php echo self::getUrlRaiz()?>/Vista/Gerencia/deleteTipoFranja.php"><span class="glyphicon glyphicon-eye-open" style="font-size: 24px; color: black;"></a>
+                <a href="<?php echo self::getUrlRaiz()?>/Vista/Gerencia/insertHorario.php"><span class="glyphicon glyphicon-plus" style="font-size: 24px; color: green;"></a>
+                <a href="<?php echo self::getUrlRaiz()?>/Vista/Gerencia/deleteHorario.php"><span class="glyphicon glyphicon-eye-open" style="font-size: 24px; color: black;"></a>
             </h3>
 			<h3 class="page-header">Horario-Trabajador
                 <a href="<?php echo self::getUrlRaiz() ?>/Vista/Gerencia/insertHorarioTrabajador.php"><span src="" class="glyphicon glyphicon-plus" style="font-size: 24px; color: green;"></span></a>
@@ -490,6 +490,117 @@ abstract class GerenciaViews extends \Vista\Plantilla\Views{
             }
             require_once __DIR__ . "/../Plantilla/pie.php";
         }
+
+        public static function insertarHorario()
+        {
+            parent::setOn(true);
+            parent::setRoot(true);
+
+            require_once __DIR__ . "/../Plantilla/cabecera.php";
+            $franjas = Gerencia\Controlador::getAllFranjas();
+
+            ?>
+            <form class="form-horizontal" name="insertarFranja" method="post"
+                  action="<?php echo self::getUrlRaiz() ?>/Controlador/Gerencia/Router.php">
+                <div class="form-group">
+                    <label class="control-label col-sm-2 col-md-2">Nombre horario:</label>
+                    <div class="col-sm-4 col-md-3">
+                        <input class="form-control" type="text" name="horario" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2 col-md-2">Hora inicio: </label>
+                    <div class="col-sm-4 col-md-3">
+                        <select class="form-control" name="horaInicio">
+                            <?php
+                            foreach ($franjas as $valor) {
+                                ?>
+                                <option value="<?php echo $valor->getId() ?>"><?php echo $valor->getHoraInicio() ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2 col-md-2">Hora fin: </label>
+                    <div class="col-sm-4 col-md-3">
+                        <select class="form-control" name="horaFin">
+                            <?php
+                            foreach ($franjas as $valor) {
+                                ?>
+                                <option value="<?php echo $valor->getId() ?>"><?php echo $valor->getHoraFin() ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group"><!--Ganeko-->
+                    <div class="col-sm-1 col-sm-offset-2">
+                        <input class="btn btn-primary" type="submit" value="Añadir" name="addHorario">
+                    </div>
+            </form>
+            <form method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Gerencia/Router.php">
+
+                    <div class="col-sm-1">
+                        <input class="btn btn-warning" type="submit" name="volver" value="Volver">
+                    </div>
+                </div>
+            </form>
+            </div>
+            <?php
+
+            require_once __DIR__ . "/../Plantilla/pie.php";
+        }
+
+        public static function deleteHorario()
+        {
+            parent::setOn(true);
+            parent::setRoot(true);
+            require_once __DIR__ . "/../Plantilla/cabecera.php";
+            $horarios = Gerencia\Controlador::getAllHorarios();
+            if(is_null($horarios)){
+                echo "No hay horarios";
+            }else {
+                ?>
+                <div class="table-responsive col-md-offset-1 col-md-10">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>HORARIO</th>
+                            <th>HORA INICIO</th>
+                            <th>HORA FIN</th>
+                            <th>ACCIÓN</th>
+                        </tr>
+                        <?php
+                        foreach ($horarios as $horario) {
+                            ?>
+                            <form name="deleteHorario" method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Gerencia/Router.php">
+                                <tr>
+                                    <td><?php echo $horario->getTipo() ?></td>
+                                    <td><?php echo Gerencia\Controlador::getHoraInicioHorario($horario)  ?></td>
+                                    <td><?php echo Gerencia\Controlador::getHoraFinHorario($horario)  ?></td>
+								    <!-- PABLO cambiar botones por glypicon unico boton volver-->
+                                    <td><button type="submit" name="eliminarHorario" value="Eliminar" style="border: none; background: none;"><span class="glyphicon glyphicon-remove" style="color:red; font-size: 1.5em"></span></button></td>
+                                </tr>
+                                <input type="hidden" name="id" value="<?php echo $horario->getId(); ?>">
+                            </form>
+                            <?php
+                        }
+                        ?>
+                    </table>
+                </div>
+				    <form method='post' name="atrasHorarios" action='<?php echo self::getUrlRaiz() ?>/Vista/Gerencia/Gerencia.php?cod=1'>
+				    <div class='form-group'>
+				        <div class="col-md-10 col-md-offset-1"><!-- Pablo Ganeko -->
+					        <input type="submit" value="Volver" class='cerrar btn btn-warning pull-right' name='volver'>
+					    </div>
+				    </div>
+				    </form>
+                <?php
+            }
+            require_once __DIR__ . "/../Plantilla/pie.php";
+        }
 	
 /*****************************************************/
 /* HORARIO TRABAJADOR */
@@ -501,14 +612,13 @@ abstract class GerenciaViews extends \Vista\Plantilla\Views{
             parent::setRoot(true);
 
             require_once __DIR__ . "/../Plantilla/cabecera.php";
-            ?>
-            <script src="<?php echo parent::getUrlRaiz() ?>/Vista/Administracion/funciones.js"></script>
-            <?php
             $trabajadores = Gerencia\Controlador::getAllTrabajadores();
             $horarios = Gerencia\Controlador::getAllHorarios();
+            $calendarios = Gerencia\Controlador::getAllCalendarios();
             ?>
 
-            <form class="form-horizontal" method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Administracion/Router.php">
+                <h2 class="page-header">Añadir horarios trabajador</h2>
+            <form class="form-horizontal" method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Gerencia/Router.php">
                 <div class="form-group">
                     <label class="control-label col-sm-2 col-md-2">Trabajador: </label>
                     <div class="col-sm-4 col-md-3">
@@ -559,13 +669,28 @@ abstract class GerenciaViews extends \Vista\Plantilla\Views{
                         </select>
                     </div>
                 </div>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-2 col-md-2">Calendario: </label> <!--Ibai-->
+                  <div class="col-sm-4 col-md-3">
+                        <select class="form-control" name="calendario">
+                            <?php
+                            foreach ($calendarios as $calendario) {
+                                ?>
+                                <option value="<?php echo $calendario->getId() ?>"><?php echo $calendario->getId() ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
                     </fieldset>
                 <div class="form-group"><!--Ganeko & Ibai-->
                     <div class="col-sm-1 col-sm-offset-2">
                         <input class="btn btn-primary" type="submit" value="Añadir" name="añadirHorarioTrabajador">
                     </div>
             </form>
-            <form method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Administracion/Router.php">
+            <form method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Gerencia/Router.php">
 
                     <div class="col-sm-1">
                         <input class="btn btn-warning" type="submit" name="volver" value="Volver">
@@ -577,7 +702,7 @@ abstract class GerenciaViews extends \Vista\Plantilla\Views{
             require_once __DIR__ . "/../Plantilla/pie.php";
         }
 
-        // Función para mostrar filtros de empresa,centro... al mostrar horarios-trabajador a administracion
+        // Función para mostrar filtros de empresa,centro... al mostrar horarios-trabajador
         // Ibai
         public static function filtroHorarioTrabajador(){
             parent::setOn(true);
@@ -656,7 +781,7 @@ abstract class GerenciaViews extends \Vista\Plantilla\Views{
                         ?>
                         <form method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Gerencia/Router.php">
                             <?php
-                                echo Gerencia\Controlador::incidenciasHorarioTrabajador($horarioTrabajador[$x]->getTrabajador()->getDni(), $horarioTrabajador[$x]->getNumeroSemana(), $horarioTrabajador[$x]->getCalendario()->getId()) ?
+                                    echo Gerencia\Controlador::incidenciasHorarioTrabajador($horarioTrabajador[$x]->getTrabajador()->getDni(), $horarioTrabajador[$x]->getNumeroSemana(), $horarioTrabajador[$x]->getCalendario()->getId()) ?
                                     "<tr style='background-color:lightcoral'>":
                                     "<tr>";
                              ?>
@@ -1387,7 +1512,7 @@ abstract class GerenciaViews extends \Vista\Plantilla\Views{
                         <th>Nueva contraseña</th>
                         <th>Acción</th>
                     </tr>
-                    <form name="updatePassword" method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Administracion/Router.php">
+                    <form name="updatePassword" method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Gerencia/Router.php">
                         <tr>
                             <td>
                                 <input type="text" class="form-control" name="trabajador" value="<?php echo $_SESSION["dni"]; ?>">
@@ -1404,7 +1529,7 @@ abstract class GerenciaViews extends \Vista\Plantilla\Views{
                     </form>
                 </table>
             </div>
-            <form name="updatePassword" method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Administracion/Router.php">
+            <form name="updatePassword" method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Gerencia/Router.php">
                 <div class="col-md-10 col-md-offset-1"><!--Ganeko-->
                     <input class="btn btn-warning pull-right" type="submit" name="volver" value="Volver">
                 </div>
@@ -1429,7 +1554,7 @@ abstract class GerenciaViews extends \Vista\Plantilla\Views{
                 foreach ($horas as $hora) {
                     ?>
                     <form name="deleteEstado" method="post"
-                          action="<?php echo self::getUrlRaiz() ?>/Controlador/Administracion/Router.php">
+                          action="<?php echo self::getUrlRaiz() ?>/Controlador/Gerencia/Router.php">
                         <tr>
                             <td><?php echo $hora->getDenominacion(); ?></td>
                             <td><?php echo $hora->getHorasAnual(); ?></td>

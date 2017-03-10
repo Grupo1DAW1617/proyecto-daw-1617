@@ -152,7 +152,7 @@ if(isset($_POST['updateHorasConvenio'])){
 }
 if(isset($_POST['añadirHorarioTrabajador'])){
     Controlador::addHorarioTrabajador($_POST);
-    header($gestionListas);
+    //header($gestionListas);
 }
 if(isset($_POST['mostrarHorarioTrabajador'])){ //Ibai
     $_SESSION["filtrosHorarios"] = $_POST;
@@ -234,7 +234,7 @@ if(isset($_POST['abrirParteLogistica'])){
 }/* PABLO */
 if(isset($_POST['updateHorarioTrabajador'])){
     $_SESSION["dht_semana"]=$_POST["dht_semana"];
-	
+
 	header("Location: ".Views::getUrlRaiz()."/Vista/Administracion/updateHorarioTrabajador.php");
 	
 }

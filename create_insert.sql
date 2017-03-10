@@ -19,6 +19,11 @@ CREATE TABLE IF NOT EXISTS `himevico`.`ausencia` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+INSERT INTO `himevico`.`ausencia` (`tipo`,`color`) VALUES ("Permiso", "Azul");
+INSERT INTO `himevico`.`ausencia` (`tipo`,`color`) VALUES ("Enfermedad profesional", "Amarillo");
+INSERT INTO `himevico`.`ausencia` (`tipo`,`color`) VALUES ("Enfermedad comun", "Rosa");
+INSERT INTO `himevico`.`ausencia` (`tipo`,`color`) VALUES ("Otros", "Gris");
+
 
 -- -----------------------------------------------------
 -- Table `himevico`.`empresas` comentario de prueba
@@ -113,6 +118,7 @@ ENGINE = MyISAM
 AUTO_INCREMENT = 21944
 DEFAULT CHARACTER SET = latin1;
 
+
 -- -----------------------------------------------------
 -- Table `himevico`.`festivos`
 -- -----------------------------------------------------
@@ -137,13 +143,7 @@ CREATE TABLE IF NOT EXISTS `himevico`.`festivos` (
     FOREIGN KEY (`centros_id`)
     REFERENCES `himevico`.`centros` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_festivos_calendario1`
-    FOREIGN KEY (`calendario_id`)
-    REFERENCES `himevico`.`calendario` (`id`)
-    ON DELETE NO ACTION
     ON UPDATE NO ACTION
-    
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -448,15 +448,6 @@ CREATE TABLE IF NOT EXISTS `himevico`.`horariotrabajadores` (
     FOREIGN KEY (`dniTrabajador`)
     REFERENCES `himevico`.`trabajadores` (`dni`)
     
-    
-  /* OJO:!! Activar cuando se  programe la parte de calendario*/
-  
-  
-  , CONSTRAINT `fk_horariotrabajadores_calendario1`
-    FOREIGN KEY (`calendario_id`)
-    REFERENCES `himevico`.`calendario` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
    )
 ENGINE = InnoDB
 AUTO_INCREMENT = 107
@@ -467,7 +458,7 @@ DEFAULT CHARACTER SET = utf8;
 
 LOCK TABLES `horariotrabajadores` WRITE;
 /*!40000 ALTER TABLE `horariotrabajadores` DISABLE KEYS */;
-INSERT INTO `horariotrabajadores` (`id`,`dniTrabajador`,`idHorario`,`numeroSemana`, `calendario_id`) VALUES (3,'12345678G',1,1,1),(4,'12345678G',1,2,1),(5,'12345678G',1,3,1),(6,'12345678G',1,4,1),(7,'12345678G',1,5,1),(8,'12345678G',1,6,1),(9,'12345678G',1,7,1),(10,'12345678G',1,8,1),(11,'12345678G',1,9,1),(12,'12345678G',1,10,1),(13,'12345678G',1,11,1),(14,'12345678G',1,12,1),(15,'12345678G',1,13,1),(16,'12345678G',1,14,1),(17,'12345678G',1,15,1),(18,'12345678G',1,16,1),(19,'12345678G',1,17,1),(20,'12345678G',1,18,1),(21,'12345678G',1,19,1),(22,'12345678G',1,20,1),(23,'12345678G',1,21,1),(24,'12345678G',1,22,1),(25,'12345678G',1,23,1),(26,'12345678G',1,24,1),(27,'12345678G',1,25,1),(28,'12345678G',1,26,1),(29,'12345678G',1,27,1),(30,'12345678G',1,28,1),(31,'12345678G',1,29,1),(32,'12345678G',1,30,1),(33,'12345678G',1,31,1),(34,'12345678G',1,32,1),(35,'12345678G',1,33,1),(36,'12345678G',1,34,1),(37,'12345678G',1,35,1),(38,'12345678G',1,36,1),(39,'12345678G',1,37,1),(40,'12345678G',1,38,1),(41,'12345678G',1,39,1),(42,'12345678G',1,40,1),(43,'12345678G',1,41,1),(44,'12345678G',1,42,1),(45,'12345678G',1,43,1),(46,'12345678G',1,44,1),(47,'12345678G',1,45,1),(48,'12345678G',1,46,1),(49,'12345678G',1,47,1),(50,'12345678G',1,48,1),(51,'12345678G',1,49,1),(52,'12345678G',1,50,1),(53,'12345678G',1,51,1),(54,'12345678G',1,52,1),(55,'33333333A',7,1,1),(56,'33333333A',7,2,1),(57,'33333333A',7,3,1),(58,'33333333A',7,4,1),(59,'33333333A',7,5,1),(60,'33333333A',7,6,1),(61,'33333333A',7,7,1),(62,'33333333A',7,8,1),(63,'33333333A',7,9,1),(64,'33333333A',7,10,1),(65,'33333333A',7,11,1),(66,'33333333A',7,12,1),(67,'33333333A',7,13,1),(68,'33333333A',7,14,1),(69,'33333333A',7,15,1),(70,'33333333A',7,16,1),(71,'33333333A',7,17,1),(72,'33333333A',7,18,1),(73,'33333333A',7,19,1),(74,'33333333A',7,20,1),(75,'33333333A',7,21,1),(76,'33333333A',7,22,1),(77,'33333333A',7,23,1),(78,'33333333A',7,24,1),(79,'33333333A',7,25,1),(80,'33333333A',7,26,1),(81,'33333333A',7,27,1),(82,'33333333A',7,28,1),(83,'33333333A',7,29,1),(84,'33333333A',7,30,1),(85,'33333333A',7,31,1),(86,'33333333A',7,32,1),(87,'33333333A',7,33,1),(88,'33333333A',7,34,1),(89,'33333333A',7,35,1),(90,'33333333A',7,36,1),(91,'33333333A',7,37,1),(92,'33333333A',7,38,1),(93,'33333333A',7,39,1),(94,'33333333A',7,40,1),(95,'33333333A',7,41,1),(96,'33333333A',7,42,1),(97,'33333333A',7,43,1),(98,'33333333A',7,44,1),(99,'33333333A',7,45,1),(100,'33333333A',7,46,1),(101,'33333333A',7,47,1),(102,'33333333A',7,48,1),(103,'33333333A',7,49,1),(104,'33333333A',7,50,1),(105,'33333333A',7,51,1),(106,'33333333A',7,52,1);
+INSERT INTO `horariotrabajadores` (`id`,`dniTrabajador`,`idHorario`,`numeroSemana`) VALUES (3,'12345678G',1,1),(4,'12345678G',1,2),(5,'12345678G',1,3),(6,'12345678G',1,4),(7,'12345678G',1,5),(8,'12345678G',1,6),(9,'12345678G',1,7),(10,'12345678G',1,8),(11,'12345678G',1,9),(12,'12345678G',1,10),(13,'12345678G',1,11),(14,'12345678G',1,12),(15,'12345678G',1,13),(16,'12345678G',1,14),(17,'12345678G',1,15),(18,'12345678G',1,16),(19,'12345678G',1,17),(20,'12345678G',1,18),(21,'12345678G',1,19),(22,'12345678G',1,20),(23,'12345678G',1,21),(24,'12345678G',1,22),(25,'12345678G',1,23),(26,'12345678G',1,24),(27,'12345678G',1,25),(28,'12345678G',1,26),(29,'12345678G',1,27),(30,'12345678G',1,28),(31,'12345678G',1,29),(32,'12345678G',1,30),(33,'12345678G',1,31),(34,'12345678G',1,32),(35,'12345678G',1,33),(36,'12345678G',1,34),(37,'12345678G',1,35),(38,'12345678G',1,36),(39,'12345678G',1,37),(40,'12345678G',1,38),(41,'12345678G',1,39),(42,'12345678G',1,40),(43,'12345678G',1,41),(44,'12345678G',1,42),(45,'12345678G',1,43),(46,'12345678G',1,44),(47,'12345678G',1,45),(48,'12345678G',1,46),(49,'12345678G',1,47),(50,'12345678G',1,48),(51,'12345678G',1,49),(52,'12345678G',1,50),(53,'12345678G',1,51),(54,'12345678G',1,52),(55,'33333333A',7,1),(56,'33333333A',7,2),(57,'33333333A',7,3),(58,'33333333A',7,4),(59,'33333333A',7,5),(60,'33333333A',7,6),(61,'33333333A',7,7),(62,'33333333A',7,8),(63,'33333333A',7,9),(64,'33333333A',7,10),(65,'33333333A',7,11),(66,'33333333A',7,12),(67,'33333333A',7,13),(68,'33333333A',7,14),(69,'33333333A',7,15),(70,'33333333A',7,16),(71,'33333333A',7,17),(72,'33333333A',7,18),(73,'33333333A',7,19),(74,'33333333A',7,20),(75,'33333333A',7,21),(76,'33333333A',7,22),(77,'33333333A',7,23),(78,'33333333A',7,24),(79,'33333333A',7,25),(80,'33333333A',7,26),(81,'33333333A',7,27),(82,'33333333A',7,28),(83,'33333333A',7,29),(84,'33333333A',7,30),(85,'33333333A',7,31),(86,'33333333A',7,32),(87,'33333333A',7,33),(88,'33333333A',7,34),(89,'33333333A',7,35),(90,'33333333A',7,36),(91,'33333333A',7,37),(92,'33333333A',7,38),(93,'33333333A',7,39),(94,'33333333A',7,40),(95,'33333333A',7,41),(96,'33333333A',7,42),(97,'33333333A',7,43),(98,'33333333A',7,44),(99,'33333333A',7,45),(100,'33333333A',7,46),(101,'33333333A',7,47),(102,'33333333A',7,48),(103,'33333333A',7,49),(104,'33333333A',7,50),(105,'33333333A',7,51),(106,'33333333A',7,52);
 /*!40000 ALTER TABLE `horariotrabajadores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -663,12 +654,8 @@ CREATE TABLE IF NOT EXISTS `himevico`.`ausenciastrabajadores` (
     REFERENCES `himevico`.`ausencia` (`id`),
   CONSTRAINT `ta_trabajador_FK`
     FOREIGN KEY (`dniTrabajador`)
-    REFERENCES `himevico`.`trabajadores` (`dni`),
-  CONSTRAINT `fk_ausenciastrabajadores_calendario1`
-    FOREIGN KEY (`calendario_id`)
-    REFERENCES `himevico`.`calendario` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `himevico`.`trabajadores` (`dni`)
+)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -743,12 +730,8 @@ CREATE TABLE IF NOT EXISTS `himevico`.`festivosnacional` (
   `motivo` VARCHAR(45) NOT NULL,
   `calendario_id` INT(4) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_festivosnacional_calendario1_idx` (`calendario_id` ASC),
-  CONSTRAINT `fk_festivosnacional_calendario1`
-    FOREIGN KEY (`calendario_id`)
-    REFERENCES `himevico`.`calendario` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_festivosnacional_calendario1_idx` (`calendario_id` ASC)
+  )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -771,12 +754,7 @@ CREATE TABLE IF NOT EXISTS `himevico`.`vacacionestrabajadores` (
   INDEX `fk_ausenciastrabajadores_calendario1_idx` (`calendario_id` ASC),
   CONSTRAINT `ta_trabajador_FK0`
     FOREIGN KEY (`dniTrabajador`)
-    REFERENCES `himevico`.`trabajadores` (`dni`),
-  CONSTRAINT `fk_ausenciastrabajadores_calendario10`
-    FOREIGN KEY (`calendario_id`)
-    REFERENCES `himevico`.`calendario` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `himevico`.`trabajadores` (`dni`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 

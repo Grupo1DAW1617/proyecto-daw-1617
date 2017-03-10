@@ -4,7 +4,7 @@ require_once __DIR__.'/../../Modelo/BD/GenericoBD.php';;
 require_once __DIR__.'/../Plantilla/Views.php';
 
 use Vista\Plantilla;
-abstract class CalendarioGestionarCalendario extends Plantilla\Views
+abstract class CalendarioGestionarCalendariosIndividuales extends Plantilla\Views
 {
     public static function cal($comprobar){
         parent::setOn(true);
@@ -12,18 +12,43 @@ abstract class CalendarioGestionarCalendario extends Plantilla\Views
         require_once __DIR__."/../Plantilla/cabecera.php";
         ?>
 
-
         <link type="text/css" rel="stylesheet" media="all" href="<?php echo parent::getUrlRaiz()?>/Vista/Plantilla/CSS/Bootstrap/estilos.css">
 
+        <form name="trabajador" method="post" action="../../Controlador/Calendario/ControladorCalendario.php">
 
-        <div class="calendario_ajax">
-            <div class="cal"></div><div id="mask"></div>
-        </div>
+            <h2>Asignar calendarios individuales</h2>
+
+            <div class="form-group row" id="empresa" style="padding: 0; margin-left: -15px">
+                <h4 class="col-sm-2">Empresa: </h4>
+                <div class="col-sm-2">
+                    <select id="nomEmpresa" class="form-control">
+                        <option value="-1">-- Seleccionar --</option>
+                        <?php
+                        $empresas = \Modelo\BD\EmpresaBD::getAll();
+                        foreach($empresas as $empresa){
+                            ?>
+                            <option value="<?php echo $empresa->getId(); ?>"><?php echo $empresa->getNombre(); ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row" style="padding: 0; margin-left: -15px">
+                <h4 class="col-sm-2">Trabajador: </h4>
+                <div class="col-sm-2">
+                    <select class="form-control" name="trabajador" id="trabajador">
+                    </select>
+                </div>
+            </div>
+
+            <input type="submit" class="btn btn-primary" name="aceptar" value="Aceptar">
+
+        </form>
 
         <script src="<?php echo parent::getUrlRaiz();?>/Vista/Plantilla/JS/jquery-2.2.1.min.js"></script>
         <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
         <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/localization/messages_es.js "></script>
-
 
         <script>
             function generar_calendario(mes,anio)
@@ -235,6 +260,38 @@ abstract class CalendarioGestionarCalendario extends Plantilla\Views
                     var datos=$(this).attr("rel");
                     var nueva_fecha=datos.split("-");
                     generar_calendario(nueva_fecha[1],nueva_fecha[0]);
+                });
+
+                /**
+                 * A la hora de cambiar el nombre de la empresa , que te busque los trabajadores
+                 *
+                 * Anas
+                 **/
+
+                $( "#nomEmpresa").on("change",function () {
+                    try{
+
+                        var idEmpresa = $(this).val();
+
+                        $.ajax({
+
+                            type: "GET",
+                            url: "<?php echo parent::getUrlRaiz()?>/Controlador/Calendario/ControladorCalendario.php",
+                            data: { idEmpresa : idEmpresa , accion:"buscarTrab"}
+
+                        })
+                            .done(function(respuesta) {
+
+                                $("#trabajador").html(respuesta);
+
+                            })
+                            .fail(function() {
+                                alert( "error" );
+                            });
+
+                    }catch (err){
+                        alert(err)
+                    }
                 });
 
             });

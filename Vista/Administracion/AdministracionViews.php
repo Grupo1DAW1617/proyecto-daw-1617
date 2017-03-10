@@ -44,12 +44,12 @@ abstract class AdministracionViews extends \Vista\Plantilla\Views
             <h3 class="page-header">Convenio
                 <a href="<?php echo self::getUrlRaiz()?>/Vista/Administracion/insertHorasConvenio.php"><span src="" class="glyphicon glyphicon-plus" style="font-size: 24px; color: green;"></span></a>
                 <a href="<?php echo self::getUrlRaiz()?>/Vista/Administracion/deleteHorasConvenio.php"><span class="glyphicon glyphicon-eye-open" style="font-size: 24px; color: black;"></span></a>
-                
+
             </h3>
             <h3 class="page-header">Tipo Franja
                 <a href="<?php echo self::getUrlRaiz()?>/Vista/Administracion/insertTipoFranja.php"><span src="" class="glyphicon glyphicon-plus" style="font-size: 24px; color: green;"></span></a>
                 <a href="<?php echo self::getUrlRaiz()?>/Vista/Administracion/deleteTipoFranja.php"><span class="glyphicon glyphicon-eye-open" style="font-size: 24px; color: black;"></span></a>
-                
+
             </h3>
             <h3 class="page-header">Horario
                 <a href="<?php echo self::getUrlRaiz() ?>/Vista/Administracion/insertHorario.php"><span src="" class="glyphicon glyphicon-plus" style="font-size: 24px; color: green;"></span></a>
@@ -204,7 +204,7 @@ abstract class AdministracionViews extends \Vista\Plantilla\Views
                             </select>
                         </div>
                     </div>
-                    
+
                 </fieldset>
                 <div class="form-group"><!--Ganeko & Ibai-->
                     <div class="col-sm-1 col-sm-offset-2">
@@ -450,7 +450,7 @@ abstract class AdministracionViews extends \Vista\Plantilla\Views
                             </select>
                         </div>
                     </div>
-                    
+
                 </fieldset>
                 <div class="form-group"><!--Ganeko & Ibai-->
                     <div class="col-sm-1 col-sm-offset-2">
@@ -836,7 +836,7 @@ abstract class AdministracionViews extends \Vista\Plantilla\Views
 					<button type="submit" name="vistaEditarConvenio" value="Editar"
                                                 style="border: none; background: none;"><span
                                                 class="glyphicon glyphicon-pencil"
-                                                style="color:black; font-size: 1.5em"></span></button>	
+                                                style="color:black; font-size: 1.5em"></span></button>
                                         <input type="hidden" name="id" value="<?php echo $horaconvenio->getId(); ?>">
                                     </form>
                                 </td>
@@ -850,7 +850,7 @@ abstract class AdministracionViews extends \Vista\Plantilla\Views
 
                     <div class="col-md-10 col-md-offset-1"><!--Ganeko-->
                         <div class="pull-right">
-                            
+
                             <input class="btn btn-warning" type="submit" name="volver" value="Volver">
                         </div>
                     </div>
@@ -2319,7 +2319,25 @@ abstract class AdministracionViews extends \Vista\Plantilla\Views
             require_once __DIR__ . "/../Plantilla/pie.php";
         }
 
-/*****************************************************/
+
+        public static function visualizarVacacionesOpen()           //Aitor
+        {
+            parent::setOn(true);
+            parent::setRoot(true);
+
+            require_once __DIR__ . "/../Plantilla/cabecera.php";
+
+            echo "<form action='../../Controlador/Administracion/ControladorCalendario.php' method='post'>";
+            echo "<table class='table table-striped'><tr><td>Calendario</td><td>Trabajador</td><td>Fecha</td></tr>";
+            $festivos=BD\FestivoBD::getFestivoByEstado();
+            while($rows=mysqli_fetch_array($festivos)){
+                echo "<tr><td>$rows[calendario_id]</td><td>$rows[dniTrabajador]</td><td>$rows[fecha]</td></tr>";
+            }
+            echo "</table></form>";
+            require_once __DIR__ . "/../Plantilla/pie.php";
+        }
+
+    /*****************************************************/
 /* FOTO */
 /*****************************************************/
 
@@ -2327,6 +2345,7 @@ abstract class AdministracionViews extends \Vista\Plantilla\Views
         //Ganeko
         parent::setOn(true);
         parent::setRoot(true);
+
 
         require_once __DIR__ . "/../Plantilla/cabecera.php";
 
@@ -2680,7 +2699,7 @@ abstract class AdministracionViews extends \Vista\Plantilla\Views
 						<th>CALENDARIO</th> <!--Ibai-->
 						<th>ACCIÓN</th>
                     </tr>
-                    
+
                         <form method="post" action="<?php echo self::getUrlRaiz() ?>/Controlador/Administracion/Router.php">
                             <tr>
 							<?php $_SESSION["dniht"]=$horarioTrabajador[$_SESSION["dht_semana"]]->getTrabajador()->getDni(); $_SESSION["semht"]=$horarioTrabajador[$_SESSION["dht_semana"]]->getNumeroSemana();?>
@@ -2703,9 +2722,9 @@ abstract class AdministracionViews extends \Vista\Plantilla\Views
                 </div>
             </form>
 			<?php
-		
+
 		require_once __DIR__ ."/../Plantilla/pie.php";
-		
+
 	}
     public static function updateEmpresa(){ /*Ganeko*/
 

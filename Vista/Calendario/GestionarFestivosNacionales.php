@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/CalendarioVacaciones.php';
+require_once __DIR__.'/CalendarioGestionarFestivosNacionales.php';
 
 $login = unserialize($_SESSION['login']);
 
@@ -18,10 +18,10 @@ if ($login->getPassword() == $trabajorPasswordm5){
 else{
     switch($perfil){
         case "Administracion":
-            CalendarioVac::cal(true);
+            CalendarioGestionarFestivosNacionales::cal(true);
             break;
         case "Gerencia":
-            CalendarioVac::cal(true);
+            CalendarioGestionarFestivosNacionales::cal(true);
             break;
         default:
             header("Location: ".\Vista\Plantilla\Views::getUrlRaiz()."/Vista/Login/Login.php");

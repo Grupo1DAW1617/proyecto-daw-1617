@@ -49,3 +49,19 @@ a.editar_tarea{color: #8c8c8c}
 a.editar_tarea:hover{color: #3c3c3c;}
 a.eliminar_tarea{color: red;}
 a.eliminar_tarea:hover{color: #C60000;}
+
+.calendario td.A{
+    background-color: #e6ffe6;
+}
+
+.calendario td.S{
+    background-color: #ccffff;
+}
+
+.calendario td.R{
+    background-color: #ffcccc;
+}
+
+.calendario td.D{
+    background-color: #ffffcc;
+}

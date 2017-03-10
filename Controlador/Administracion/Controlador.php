@@ -1,5 +1,9 @@
 <?php
 namespace Controlador\Administracion;
+if(session_status()!=2){
+    session_start();
+}
+
 
 use Modelo\Base\Administracion;
 use Modelo\Base\Calendario;
@@ -40,6 +44,7 @@ require_once __DIR__ .'/../../Modelo/Base/HorariosTrabajadoresClass.php';
 require_once __DIR__."/../../Modelo/Base/FestivoClass.php";
 require_once __DIR__."/../../Modelo/Base/ViajeClass.php";
 require_once __DIR__."/../../Vista/Administracion/AdministracionViews.php";
+require_once __DIR__."/../../Vista/Administracion/Incidencias.php";
 
 
 
@@ -238,6 +243,7 @@ abstract class Controlador{
         BD\TrabajadorBD::deleteTrabajador($datos["dni"]);
         self::eliminarDir(__DIR__."/../../Vista/Fotos/".$datos['dni']);
     }
+
 
     public static function AddCentro($datos){
         $empresa = BD\EmpresaBD::getEmpresaByID($datos['empresa']);
@@ -658,7 +664,68 @@ abstract class Controlador{
     //David
     public static function insertarIncidencia($datos){
 
+        $fecha = getdate();
+        $fecha2 = date("Y-m-d");
 
+        $incidencia = new AusenciaTrabajador(null, $fecha2, "00:00", "00:00", $datos["dni"], $datos["motivo"], $fecha["year"]);
+
+        $res = \Modelo\BD\AusenciaTrabajadorBD::setAusencias($incidencia);
+
+        if($res != 1){
+            echo "<script>alert('Error al introducir la incidencia. Es posible que el DNI no sea correcto.')</script>";
+            \Vista\Administracion\Incidencias::mostrar();
+        }else{
+            echo "<script>alert('Incidencia introducida correctamente')</script>";
+            \Vista\Administracion\Incidencias::mostrar();
+        }
+    }
+
+    // IRUNE
+
+    public static function crearObjetoCalendario() {
+
+        if ($_POST['calendario'] != "" && $_POST['descripcion'] != "") {
+
+            $calendario = new \Modelo\Base\Calendario($_POST['calendario'], $_POST['descripcion'], 1);
+            return $calendario;
+
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    // IRUNE
+
+    public static function cerrarCalendario() {
+
+        if ($_POST['calendario'] != "") {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    public static function comprobarFestivos($calendario) {
+
+        if(BD\CalendarioBD::comprobarFestivos($calendario)){
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    // IRUNE
+
+    public static function crearObjetoCentro() {
+
+        $centro = new Centro($_POST['centro']);
+        return $centro;
 
     }
 

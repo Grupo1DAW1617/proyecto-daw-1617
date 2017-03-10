@@ -35,7 +35,9 @@
 <script src="<?php echo parent::getUrlRaiz();?>/Vista/Login/Funciones.js"></script>
 <script src="<?php echo parent::getUrlRaiz();?>/Vista/Produccion/Funciones.js"></script>
 <script src="<?php echo parent::getUrlRaiz();?>/Vista/Administracion/funciones.js"></script>
-
+<!-- Alejandra -->
+<script src="<?php echo parent::getUrlRaiz();?>/Vista/Busqueda/funciones.js"></script>
+<script src="<?php echo parent::getUrlRaiz();?>/Vista/Plantilla/JS/smoke.js-master/smoke.js"></script>
 
 </body>
 </html>

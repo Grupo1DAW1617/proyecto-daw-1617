@@ -342,6 +342,16 @@ abstract class Controlador
         return BD\HorarioBD::getAll();
     }
 
+    public static function getHoraInicioHorario($horario){
+        $franja = BD\FranjaBD::getHoraInicio($horario->getId());
+        return $franja->getHoraInicio();
+    }
+
+    public static function getHoraFinHorario($horario){
+        $franja = BD\FranjaBD::getHoraFinal($horario->getId());
+        return $franja->getHoraFin();
+    }
+
     public static function deleteHorario($datos)
     {
         BD\HorarioBD::delete($datos["id"]);
@@ -514,6 +524,10 @@ abstract class Controlador
             return $partes = BD\PartelogisticaBD::getAllByTrabajador($trabajador);
         }
 
+    }
+
+    public static function getAllCalendarios(){
+        return BD\CalendarioBD::getAll();
     }
 
 

@@ -123,6 +123,17 @@ switch ($_POST["accion"])
 		else $dias=array("","31","28","31","30","31","30","31","31","30","31","30","31");
 
 		$eventos=array();
+        error_reporting(E_ERROR | E_WARNING | E_PARSE);
+        date_default_timezone_set('Europe/Madrid');
+        $dbhost="localhost";
+        $dbname="himevico";
+        $dbuser="root";
+        $dbpass="root";
+        $tabla="";
+        $db = new mysqli($dbhost,$dbuser,$dbpass,$dbname);
+        if ($db->connect_errno) {
+            die ("<h1>Fallo al conectar a MySQL: (" . $db->connect_errno . ") " . $db->connect_error."</h1>");
+        }
 
 		$q="select fecha, COUNT(id) as total from parteslogistica where month(fecha)='".$fecha_calendario[1]."' and year(fecha)='".$fecha_calendario[0]."' and dniTrabajador='".$trabajador->getDni()."' group by fecha";
 		$query=$db->query($q);
