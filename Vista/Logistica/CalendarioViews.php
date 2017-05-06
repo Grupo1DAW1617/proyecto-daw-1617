@@ -233,10 +233,17 @@ public static function generarcalendario(){
                        form_groups[1].style.background = "#f00000";
                        form_groups[2].style.background = "#f00000"; 
                     }
+                    else{
+                        form_groups[1].style.background = "#ffffff";
+                       form_groups[2].style.background = "#ffffff"; 
+                    }
                     if(!matriz_booleana_o_algo_asi[1]){form_groups[3].style.background = "#f00000";}
+                    else{form_groups[3].style.background = "#ffffff";}
 
                 }
 		});
+		
+		
 
 
             //eliminar evento
@@ -357,15 +364,16 @@ public static function generarcalendario(){
 	}
 	else{
 	    var form_groups =document.getElementsByClassName("form-group");
-	    if(!matriz_booleana_o_algo_asi[0]){
-	       form_groups[1].style.background = "#f00000";
-	       form_groups[2].style.background = "#f00000"; 
+            if(!matriz_booleana_o_algo_asi[0]){
+	    form_groups[1].style.background = "#f00000";
+	    form_groups[2].style.background = "#f00000"; 
 	    }
-
+	    else{
+		form_groups[1].style.background = "#ffffff";
+	       form_groups[2].style.background = "#ffffff"; 
+	    }
 	    if(!matriz_booleana_o_algo_asi[1]){form_groups[3].style.background = "#f00000";}
-
-
-
+	    else{form_groups[3].style.background = "#ffffff";}
 	}
     });
 
