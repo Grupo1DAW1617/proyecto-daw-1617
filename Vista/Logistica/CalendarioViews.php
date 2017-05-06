@@ -306,39 +306,68 @@ public static function generarcalendario(){
             });
 
 
-            $(document).on("click",".modificarLinea", function (e) {
-                e.preventDefault();
-                var current_p=$(this);
-                var id=$(this).attr("rel");
-                var vehiculo=$('#Vehiculo').val();
-                var horaInicio=$('#HorasInicio').val()+":"+$('#MinutosInicio').val()+":00";
-                var horaFin=$('#HorasFin').val()+":"+$('#MinutosFin').val()+":00";
-                var albaran=$('#Albaran').val();
-                var fecha=$('#FechaHoy').val();
+		
+	//Modificar linea AITOR I VALIDACIONES	
+	$(document).on("click",".modificarLinea", function (e) {
+	e.preventDefault();
 
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo parent::getUrlRaiz()?>/Controlador/Logistica/ControladorCalendario.php",
-                    cache: false,
-                    data: { id:id, vehiculo:vehiculo,horaInicio:horaInicio,horaFin:horaFin,albaran:albaran,fecha:fecha,accion:'modificar_evento' }
-                }).done(function( respuesta )
-                {
-                    $("#mask").html(respuesta);
-                    setTimeout(function(){
+	var current_p=$(this);
+	var id=$(this).attr("rel");
+	var vehiculo=$('#Vehiculo').val();
+	var horaInicio=$('#HorasInicio').val()+":"+$('#MinutosInicio').val()+":00";
+	var horaFin=$('#HorasFin').val()+":"+$('#MinutosFin').val()+":00";
+	var albaran=$('#Albaran').val();
+	var fecha=$('#FechaHoy').val();
+	var matriz_booleana_o_algo_asi = [1,1];
 
-                        $("#mask").fadeOut(500);
-                        $('.cal').fadeIn();
-                        location.reload();
+	if(horaFin <= horaInicio){matriz_booleana_o_algo_asi[0] = 0;}
 
-                    },3000);
+	if(albaran === ""){
+	    matriz_booleana_o_algo_asi[1] = 0;
+	}
+	else{
+
+	    if(isNaN(albaran)){matriz_booleana_o_algo_asi[1] = 0;}
+	    else{
+		if(parseInt(albaran) !== parseFloat(albaran)){matriz_booleana_o_algo_asi[1] = 0;}
+	    }
+	}
+
+	if(matriz_booleana_o_algo_asi[0] * matriz_booleana_o_algo_asi[1]){  
+	$.ajax({
+	    type: "POST",
+	    url: "<?php echo parent::getUrlRaiz()?>/Controlador/Logistica/ControladorCalendario.php",
+	    cache: false,
+	    data: { id:id, vehiculo:vehiculo,horaInicio:horaInicio,horaFin:horaFin,albaran:albaran,fecha:fecha,accion:'modificar_evento' }
+	}).done(function( respuesta )
+	{
+	    $("#mask").html(respuesta);
+	    setTimeout(function(){
+
+		$("#mask").fadeOut(500);
+		$('.cal').fadeIn();
+		location.reload();
+
+	    },3000);
 
 
 
-                })
-                    .error(function(xhr){alert(xhr.status)});
+	})
+	    .error(function(xhr){alert(xhr.status)});
+	}
+	else{
+	    var form_groups =document.getElementsByClassName("form-group");
+	    if(!matriz_booleana_o_algo_asi[0]){
+	       form_groups[1].style.background = "#f00000";
+	       form_groups[2].style.background = "#f00000"; 
+	    }
+
+	    if(!matriz_booleana_o_algo_asi[1]){form_groups[3].style.background = "#f00000";}
 
 
-            });
+
+	}
+    });
 
 
 
