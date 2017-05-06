@@ -183,7 +183,9 @@ public static function generarcalendario(){
 
 
             //guardar evento
-            $(document).on("click",'.enviar',function (e)
+             
+
+    $(document).on("click",'.enviar',function (e)
             {
                 e.preventDefault();
                 var current_p=$(this);
@@ -192,30 +194,50 @@ public static function generarcalendario(){
                 var horaFin=$('#HorasFin').val()+":"+$('#MinutosFin').val()+":00";
                 var albaran=$('#Albaran').val();
                 var fecha=$('#FechaHoy').val();
+                var matriz_booleana_o_algo_asi = [1,1];
+                //VALIDACIONES AITOR I, .... SE PODRIAN HACER EN UNA FUNCION Y REUTILIZARLA(PORQUE ESTOY SEGURO QUE ESTO LO VOY A TENER QUE REUTILIZAR)
+                //PERO EN ESTE PUNTO DEL PROYECTO, VIENDO LO QUE HICIERON LOS DEL AÑO PASADO CREO YO QUE YA NO TENDRIA DEMASIADO SENTIDO. TOTAL SIEMPRE
+                //SERA MEJOR COPY PASTE DE ESTO QUE DE UNA TABLA DE 3000 LINEAS HECHA CON COPYPASTE EN CADA CELDA Y MULTIPLICADA POR 4
+                if(horaFin <= horaInicio){matriz_booleana_o_algo_asi[0] = 0;}
+                
+                if(albaran === ""){matriz_booleana_o_algo_asi[1] = 0;}
+                else{                                                       
+                    if(isNaN(albaran)){matriz_booleana_o_algo_asi[1] = 0;}
+                    else{
+                        if(parseInt(albaran) !== parseFloat(albaran)){matriz_booleana_o_algo_asi[1] = 0;}
+                    }
+                }
 
+                if(matriz_booleana_o_algo_asi[0] * matriz_booleana_o_algo_asi[1]){    
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo parent::getUrlRaiz()?>/Controlador/Logistica/ControladorCalendario.php",
+                        cache: false,
+                        data: { vehiculo:vehiculo,horaInicio:horaInicio,horaFin:horaFin,albaran:albaran,fecha:fecha,accion:'addViaje' }
+                    }).done(function( respuesta )
+                        {
+                            $("#mask").html(respuesta);
+                            setTimeout(function(){
 
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo parent::getUrlRaiz()?>/Controlador/Logistica/ControladorCalendario.php",
-                    cache: false,
-                    data: { vehiculo:vehiculo,horaInicio:horaInicio,horaFin:horaFin,albaran:albaran,fecha:fecha,accion:'addViaje' }
-                }).done(function( respuesta )
-                    {
-                        $("#mask").html(respuesta);
-                        setTimeout(function(){
+                                $("#mask").fadeOut(500);
+                                $('.cal').fadeIn();
+                                location.reload();
 
-                            $("#mask").fadeOut(500);
-                            $('.cal').fadeIn();
-                            location.reload();
+                            },3000);
+                        })
+                        .error(function(xhr){alert(xhr.status)}); 
+                }
+                else{
+                    var form_groups =document.getElementsByClassName("form-group");
+                    if(!matriz_booleana_o_algo_asi[0]){
+                       form_groups[1].style.background = "#f00000";
+                       form_groups[2].style.background = "#f00000"; 
+                    }
+                    if(!matriz_booleana_o_algo_asi[1]){form_groups[3].style.background = "#f00000";}
 
-                        },3000);
+                }
+		});
 
-
-
-                    })
-                    .error(function(xhr){alert(xhr.status)});
-
-            });
 
             //eliminar evento
             $(document).on("click",'.eliminar_evento',function (e)
