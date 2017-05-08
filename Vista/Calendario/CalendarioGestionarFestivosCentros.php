@@ -39,7 +39,7 @@ abstract class CalendarioGestionarFestivosCentros extends Plantilla\Views
             <div class="form-group row" style="padding: 0; margin-left: -15px">
                 <h4 class="col-sm-2">Calendarios: </h4>
                 <div class="col-sm-2">
-                    <select name="calendarios" id="calend" class="form-control">
+                    <select name="calendarios" id="calend" class="form-control" onchange="limitar(this.value)">
                         <?php
                         require_once "../../Modelo/BD/CalendarioBD.php";     //Aitor
                         echo "<option name='calendarios'>-- Selecciona --</option>";  //Aitor
@@ -74,7 +74,7 @@ abstract class CalendarioGestionarFestivosCentros extends Plantilla\Views
                         <label for="fInicial"> Desde: </label>  <input type="date" id="fInicial" min="<?php echo date('Y-m-d') ?>" />
                     </div>
                     <div class="form-group">
-                        <label for="fFinal"> Hasta: </label>  <input type="date" id="fFinal" min="<?php echo date('Y-m-d') ?>"/>
+                        <label for="fFinal"> Hasta: </label>  <input type="date" onchange="comprobar(this.value)" id="fFinal" min="<?php echo date('Y-m-d') ?>"/>
                     </div>
                     <input class="btn btn-primary" type="button" value="Seleccionar dias" id="rangoDias" name="rangoDias" onclick="guardarRango()"/>
                 </div>
@@ -151,8 +151,52 @@ abstract class CalendarioGestionarFestivosCentros extends Plantilla\Views
 
             $("#fInicial").change(function () {
 
-                $("#fFinal").attr("min", $("#fInicial").val());
-                $("#fFinal").val($("#fInicial").val());
+                var fechaInicial = $("#fInicial").val();
+                var fechaActual = new Date();
+
+                if(fechaActual.getFullYear() == $("#calend").val()){
+                    var dia = ("0" + fechaActual.getDate()).slice(-2);
+                    var mes = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
+                    var diaActual = fechaActual.getFullYear()+"-"+mes+"-"+dia;
+                }else{
+                    var fecha = new Date(fechaInicial);
+                    var dia = ("0" + fecha.getDate()).slice(-2);
+                    var mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+                    var diaActual = fecha.getFullYear()+"-"+mes+"-"+dia;
+                }
+
+                if(fechaInicial < diaActual){
+                    $("#fInicial").val(diaActual);
+                }else{
+                    $("#fFinal").attr("min", $("#fInicial").val());
+                    $("#fFinal").val($("#fInicial").val());
+                }
+
+            });
+
+            $("#calendarioNacionales").change(function () {
+
+                var fechaInicial = $("#calendarioNacionales").val();
+                var fechaActual = new Date();
+
+                if(fechaActual.getFullYear() == $("#calend").val()){
+                    var dia = ("0" + fechaActual.getDate()).slice(-2);
+                    var mes = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
+                    var diaActual = fechaActual.getFullYear()+"-"+mes+"-"+dia;
+                }else{
+                    var fecha = new Date(fechaInicial);
+                    var dia = ("0" + fecha.getDate()).slice(-2);
+                    var mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+                    var diaActual = fecha.getFullYear()+"-"+mes+"-"+dia;
+                }
+
+                if(fechaInicial < diaActual){
+                    if(fechaActual.getFullYear() == $("#calend").val()){
+                        $("#calendarioNacionales").val($("#calendarioNacionales").attr("min"));
+                    }else {
+                        $("#calendarioNacionales").val($("#calend").val()+"-01-01");
+                    }
+                }
 
             });
 
@@ -294,6 +338,49 @@ abstract class CalendarioGestionarFestivosCentros extends Plantilla\Views
                 fechas = [];
             }
             <!--Iker-->
+
+            function limitar(ano) {
+                var anoActual = new Date().getFullYear();
+                $("#fInicial").val(0);
+                $("#fFinal").val(0);
+                $("#calendarioNacionales").val(0);
+                if(ano != anoActual){
+                    $("#fInicial").attr("min", ano+"-01-01").attr("max", ano+"-12-31");
+                    $("#fFinal").attr("min", ano+"-01-01").attr("max", ano+"-12-31");
+                    $("#calendarioNacionales").attr("max", ano+"-12-31").attr("min", ano+"-01-01");
+                }else{
+                    var fechaActual = new Date();
+                    var dia = ("0" + fechaActual.getDate()).slice(-2);
+                    var mes = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
+                    var diaActual = fechaActual.getFullYear()+"-"+mes+"-"+dia;
+                    $("#fInicial").attr("min", diaActual).attr("max", fechaActual.getFullYear()+"-12-31");
+                    $("#fFinal").attr("min", diaActual).attr("max", fechaActual.getFullYear()+"-12-31");
+                    $("#calendarioNacionales").attr("max", fechaActual.getFullYear()+"-12-31").attr("min", diaActual);
+                }
+            }
+
+            function comprobar(fechaFin) {
+                var fechaInicio = $("#fInicial").val();
+                var fechaActual = new Date();
+                if(fechaActual.getFullYear() == $("#calend").val()){
+                    var dia = ("0" + fechaActual.getDate()).slice(-2);
+                    var mes = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
+                    var diaActual = fechaActual.getFullYear()+"-"+mes+"-"+dia;
+                }else{
+                    var fecha = new Date(fechaFin);
+                    var dia = ("0" + fecha.getDate()).slice(-2);
+                    var mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+                    var diaActual = fecha.getFullYear()+"-"+mes+"-"+dia;
+                }
+
+                if(fechaFin >= diaActual){
+                    if(fechaInicio > fechaFin){
+                        $("#fInicial").val(fechaFin);
+                    }
+                }else{
+                    $("#fFinal").val(diaActual);
+                }
+            }
 
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

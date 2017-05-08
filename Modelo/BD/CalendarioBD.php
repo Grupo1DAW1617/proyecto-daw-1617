@@ -90,21 +90,22 @@ abstract class CalendarioBD extends GenericoBD   //Aitor
 
     }
 	public static function getCalendarioById($id){ //Ibai, cambiado de grupo 1 usando self::tabla
-        $con = parent::conectar();
+        $con = self::conectar();
+
         $query = "SELECT * FROM calendario WHERE id = ".$id;
 
         $rs = mysqli_query($con, $query) or die("Error getCalendarioById");
 
         $calendario = parent::mapear($rs, "Calendario");
 
-        parent::desconectar($con);
+        self::desconectar($con);
 
 
         return $calendario;
     }
 
     public static function getAll(){ //Ibai, cambiado de grupo 1 usando self::tabla
-        $con = parent::conectar();
+        $con = self::conectar();
 
         $query = "SELECT * FROM calendario";
 
@@ -112,7 +113,7 @@ abstract class CalendarioBD extends GenericoBD   //Aitor
 
         $calendarios = parent::mapearArray($rs, "Calendario");
 
-        parent::desconectar($con);
+        self::desconectar($con);
 
         return $calendarios;
     }

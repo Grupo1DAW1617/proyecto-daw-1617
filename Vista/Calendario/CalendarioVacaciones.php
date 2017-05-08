@@ -79,7 +79,7 @@ abstract class CalendarioVac extends Plantilla\Views
                                 <label for="fInicial"> Desde: </label>  <input type="date" id="fInicial" min="<?php echo date('Y-m-d') ?>" />
                             </div>
                             <div class="form-group" style="margin-left: 60px">
-                                <label for="fFinal"> Hasta: </label>  <input type="date" id="fFinal"  />
+                                <label for="fFinal"> Hasta: </label>  <input type="date" onchange="comprobar(this.value)" id="fFinal" min="<?php echo date('Y-m-d') ?>"/>
                             </div>
                             <input class="btn btn-primary" type="button" value="Seleccionar dias" id="rangoDias2" name="rangoDias"/>
                         </div>
@@ -351,6 +351,21 @@ abstract class CalendarioVac extends Plantilla\Views
 
                 }
 
+                $("#calendarioNacionales").change(function () {
+
+                    var fechaInicial = $("#calendarioNacionales").val();
+                    var fechaActual = new Date();
+
+                    var dia = ("0" + fechaActual.getDate()).slice(-2);
+                    var mes = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
+                    var diaActual = fechaActual.getFullYear()+"-"+mes+"-"+dia;
+
+                    if(fechaInicial < diaActual){
+                        $("#calendarioNacionales").val($("#calendarioNacionales").attr("min"));
+                    }
+
+                });
+
                 function fEditarVacaciones(valor) {
                     if($("#vacOpen").html() != ""){
                         if ($("#nomEmpresa").val() != "-1") {
@@ -482,6 +497,22 @@ abstract class CalendarioVac extends Plantilla\Views
 
                 }
 
+                function comprobar(fechaFin) {
+                    var fechaInicio = $("#fInicial").val();
+                    var fechaActual = new Date();
+
+                    var dia = ("0" + fechaActual.getDate()).slice(-2);
+                    var mes = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
+                    var diaActual = fechaActual.getFullYear()+"-"+mes+"-"+dia;
+
+                    if(fechaFin >= diaActual){
+                        if(fechaInicio > fechaFin){
+                            $("#fInicial").val(fechaFin);
+                        }
+                    }else{
+                        $("#fFinal").val(diaActual);
+                    }
+                }
 
                 function borrarFecha(fecha) {
 
