@@ -7,6 +7,12 @@
  */
 namespace Modelo\BD;
 
+use Controlador\Gerencia\Controlador;
+use Modelo\Base\Centro;
+use Modelo\Base\Empresa;
+use Modelo\Base\Estado;
+use Modelo\Base\ParteLogistica;
+
 require_once  __DIR__ .'/GenericoBD.php';
 
 abstract class PartelogisticaBD extends GenericoBD{
