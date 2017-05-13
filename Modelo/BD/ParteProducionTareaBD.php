@@ -73,7 +73,4 @@ abstract class ParteProduccionTareaBD extends GenericoBD
         mysqli_query($conn, $query) or die(mysqli_error($conn));
         parent:: desconectar($conn);
     }
-
-
-
 }

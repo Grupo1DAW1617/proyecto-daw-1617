@@ -413,4 +413,38 @@ if (isset($_POST["centros"])) { //Ibai
 if (isset($_POST["calendarios"])) { //Ibai
     echo Controlador::rellenarCalendarios();
 }
+
+/* ALEJANDRA */
+
+if(isset($_POST['buscar'])){
+    /*if(isset($_POST['tipo'])){
+        if($_POST['tipo'] == "Vacaciones"){
+            $_SESSION['buscar'] = "vacas";
+            Controlador::buscarVacaciones($_POST);
+            Controlador::formBusqueda();
+        }else{
+            echo "no es vacaciones";
+        }
+    }else{
+        if($_POST['buscar'] == "Vacaciones"){
+            $_SESSION['buscar'] = "vacas";
+            $_SESSION['error'] = "";
+            Controlador::formBusqueda();
+        }else{
+            $_SESSION['buscar'] = "inci";
+            $_SESSION['error'] = "";
+            Controlador::formBusqueda();
+        }
+        $_SESSION['buscar'] ="";
+    }*/
+
+    switch($_POST["buscar"]){
+        case "vacasprecon":
+            Controlador::vacaciones($_POST);
+            break;
+        case "incidencias":
+            Controlador::incidencias($_POST);
+            break;
+    }
+}
 ?>

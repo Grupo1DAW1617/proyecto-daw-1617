@@ -26,6 +26,7 @@ use Modelo\Base\Vehiculo;
 use Modelo\Base\Viaje;
 use Modelo\Base\Login;
 use Modelo\BD;
+use Vista\Busqueda\BusquedaViews;
 use Vista\Plantilla\Views;
 use Vista\Administracion\AdministracionViews;
 
@@ -726,6 +727,170 @@ abstract class Controlador{
 
         $centro = new Centro($_POST['centro']);
         return $centro;
+
+    }
+
+    // Alejandra
+
+    public static function formBusqueda(){
+        BusquedaViews::busqueda();
+    }
+
+    public static function formOpcion($v){
+        BusquedaViews::busquedaBoton($v);
+    }
+
+    /*public static function buscarVacaciones($v){
+        $_SESSION['error'] = "";
+        if(empty($v['empresa']) && empty($v['centro']) && empty($v['trabajador']) && empty($v['estado'])){
+            $_SESSION['error'] = "No has introducido ning&uacute;n dato pra buscar";
+        }else{
+            try {
+                if (!empty($v['empresa'])) {
+                    $emp = self::instEmpresa($v['empresa']);
+                    self::buscarEmpresa($emp);
+                } elseif (!empty($v['centro'])) {
+                    self::buscarCentro();
+                } elseif (!empty($v['trabajador'])) {
+
+                } else {
+
+                }
+                self::instanciar($v);
+                self::buscar($v);
+            }catch(Exception $e){
+                $_SESSION['error'] = $e->getMessage();
+            }
+        }
+    }*/
+
+    public static function instEmpresa($e){
+        return new Empresa(null, $e);
+    }
+
+    public static function buscarEmpresa($e){
+        BD\EmpresaBD::find($e);
+    }
+
+    public static function buscarCentro(){
+
+    }
+
+    public static function instanciar($v){
+        $cen = new Centro(null, $v['centro']);
+    }
+
+    public static function buscar($v){
+
+    }
+
+    public static function vacaciones($v){
+        try {
+            $fechaArr = "";
+            $desdeAn = "";
+            $hastaAn = "";
+            $emp = "";
+            $cen = "";
+            $tra = "";
+            $est = "";
+            if ($v["opFecha"] == "fecha") {
+                $fecha = $v["fecha"];
+                $fechaArr = explode("-", $fecha);
+                $fechaArr = $fechaArr[0];
+            } else {
+                $fechaIni = $v["fechaIni"];
+                $desdeAn = explode("-", $fechaIni);
+                $desdeAn = $desdeAn[0];
+                $fechaFin = $v["fechaFin"];
+                $hastaAn = explode("-", $fechaFin);
+                $hastaAn = $hastaAn[0];
+            }
+            if (isset($v['opEmp']) && $v['opEmp'] == "si") {
+                if(isset($v["empresa"])){
+                    $emp = [];
+                    foreach ($v["empresa"] as $empresa) {
+                        $emp[] = new Empresa($empresa);
+                    }
+                    if (count($emp) != 0) {
+                        if (isset($v["opCentro"]) && $v["opCentro"] == "si") {
+                            if(isset($v["centro"])){
+                                $cen = [];
+                                foreach ($v["centro"] as $centro) {
+                                    $cen[] = new Centro($centro);
+                                }
+                                if (count($cen) != 0) {
+                                    if (isset($v["opTrabajador"]) && $v["opTrabajador"] == "si") {
+                                        if(isset($v["trabajador"])){
+                                            $tra = [];
+                                            $perDni = self::perfilesLogisPro();
+                                            foreach ($v["trabajador"] as $trabajador){
+                                                $i=0;
+                                                for($i; $i<count($perDni) && $perDni[$i][0] != $trabajador; $i++);
+
+                                                if($i < count($perDni)){
+                                                    $perfil = $perDni[$i][1];
+                                                    switch($perfil){
+                                                        case "Logistica":
+                                                            $tra[] = new Logistica($trabajador);
+                                                            break;
+                                                        case "Produccion":
+                                                            $tra[] = new Produccion($trabajador);
+                                                            break;
+                                                        case "Gerencia":
+                                                            $tra[] = new Gerencia($trabajador);
+                                                            break;
+                                                        case "Administracion":
+                                                            $tra[] = new Administracion($trabajador);
+                                                            break;
+                                                    }
+                                                }
+                                            }
+                                            if(count($tra) != 0){
+                                                if($v['opEstado'] == "si"){
+                                                    if(isset($v["estado"])){
+                                                        $est = [];
+                                                        foreach($v["estado"] as $estado){
+                                                            $est[] = new Estado(null, $estado);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            $vacaciones = self::buscarVacaciones($fechaArr, $desdeAn, $hastaAn, $emp, $cen, $tra, $est, $v["buscar"]);
+            $_SESSION["vacasprecon"] = $vacaciones;
+            self::formBuscarVacaciones();
+        }catch(\Exception $e){
+            self::formBuscarVacaciones();
+            echo $e->getMessage();
+        }
+    }
+
+    public static function perfilesLogisPro(){
+        return BD\TrabajadorBD::getPerfLoPro();
+    }
+
+    public static function formBuscarVacaciones(){
+        BusquedaViews::vacasPreCon();
+    }
+
+    public static function buscarVacaciones($ano="", $fi="", $ff="", $emp="" , $cen="", $tra="", $est="", $buscar=""){
+        $vacaciones = self::obtenerVacaciones($ano, $fi, $ff, $emp, $cen, $tra, $est, $buscar);
+        return $vacaciones;
+    }
+
+    public static function obtenerVacaciones($ano, $fi, $ff, $emp, $cen, $tra, $est, $buscar){
+        return BD\VacacionesTrabajadoresBD::getVacaciones($ano, $fi, $ff, $emp, $cen, $tra, $est, $buscar);
+    }
+
+    public static function incidencias($v){
 
     }
 

@@ -179,12 +179,20 @@ abstract class PartelogisticaBD extends GenericoBD{
 
     // Alejandra
 
-    public static function getPartes($ano, $fi, $ff, $emp, $cen, $tra, $est){
+    public static function getPartes($ano, $fi, $ff, $emp, $cen, $tra, $est, $buscar){
         $con = parent::conectar();
-        if($ano != ""){
-            $query = "SELECT e.nombre as 'empresa', c.nombre as 'centro', t.nombre, t.apellido1, t.apellido2, p.* FROM " .self::$tabla. " p, trabajadores t, centros c, empresas e WHERE p.dniTrabajador=t.dni AND  t.idCentro=c.id AND c.idEmpresa=e.id AND YEAR(p.fecha)='$ano'";
+        if($buscar == "partesAnu"){
+            if($ano != ""){
+                $query = "SELECT e.nombre as 'empresa', c.nombre as 'centro', t.nombre, t.apellido1, t.apellido2, es.tipo as 'estado', p.* FROM " .self::$tabla. " p, trabajadores t, centros c, empresas e, estados es WHERE p.dniTrabajador=t.dni AND  t.idCentro=c.id AND c.idEmpresa=e.id AND p.idEstado=es.id AND YEAR(p.fecha)='$ano'";
+            }else{
+                $query = "SELECT e.nombre as 'empresa', c.nombre as 'centro', t.nombre, t.apellido1, t.apellido2, es.tipo as 'estado', p.* FROM " .self::$tabla. " p, trabajadores t, centros c, empresas e, estados es WHERE p.dniTrabajador=t.dni AND  t.idCentro=c.id AND c.idEmpresa=e.id AND p.idEstado=es.id AND YEAR(p.fecha) BETWEEN '$fi' AND '$ff'";
+            }
         }else{
-            $query = "SELECT e.nombre as 'empresa', c.nombre as 'centro', t.nombre, t.apellido1, t.apellido2, p.* FROM " .self::$tabla. " p, trabajadores t, centros c, empresas e WHERE p.dniTrabajador=t.dni AND  t.idCentro=c.id AND c.idEmpresa=e.id AND YEAR(p.fecha) BETWEEN '$fi' AND '$ff'";
+            if($ano != ""){
+                $query = "SELECT e.nombre as 'empresa', c.nombre as 'centro', t.nombre, t.apellido1, t.apellido2, es.tipo as 'estado', p.* FROM " .self::$tabla. " p, trabajadores t, centros c, empresas e, estados es WHERE p.dniTrabajador=t.dni AND  t.idCentro=c.id AND c.idEmpresa=e.id AND p.idEstado=es.id AND MONTH(p.fecha)='$ano'";
+            }else{
+                $query = "SELECT e.nombre as 'empresa', c.nombre as 'centro', t.nombre, t.apellido1, t.apellido2, es.tipo as 'estado', p.* FROM " .self::$tabla. " p, trabajadores t, centros c, empresas e, estados es WHERE p.dniTrabajador=t.dni AND  t.idCentro=c.id AND c.idEmpresa=e.id AND p.idEstado=es.id AND MONTH(p.fecha) BETWEEN '$fi' AND '$ff'";
+            }
         }
         if($emp != "" && count($emp) != 0){
             for($i=0; $i<count($emp); $i++){
@@ -207,12 +215,12 @@ abstract class PartelogisticaBD extends GenericoBD{
                 if($tra != "" && count($tra) != 0){
                     for($i=0; $i<count($tra); $i++){
                         if($i == 0){
-                            $query .= " AND t.dni IN (".$tra[$i]->getDni();
+                            $query .= " AND t.dni IN ('".$tra[$i]->getDni();
                         }else{
-                            $query .= ", " . $tra[$i]->getDni();
+                            $query .= "', '" . $tra[$i]->getDni();
                         }
                     }
-                    $query .= ")";
+                    $query .= "')";
                     if($est != "" && count($est) != 0){
                         for($i=0; $i<count($est); $i++){
                             if($i == 0){
@@ -227,10 +235,17 @@ abstract class PartelogisticaBD extends GenericoBD{
             }
         }
         $query .= " ORDER BY e.nombre";
-        $rs = mysqli_query($con ,$query) or die(mysqli_error($con));
-        $respuesta = parent::mapear($rs,"Parteslogistica");
+        $rs = mysqli_query($con ,$query) or die(mysqli_error($con) . "Error getPartesLogis");
+
+        $partes = array();
+        if (mysqli_num_rows($rs) != 0) {
+            while ($fila = mysqli_fetch_assoc($rs)) {
+                $trabajador =  Controlador::getTrabajador($fila["dniTrabajador"]);
+                $partes[] = [new ParteLogistica($fila["id"], $fila["fecha"], $fila["nota"], $fila["autopista"], $fila["dieta"], $fila["otroGasto"], new Estado($fila["idEstado"], $fila["estado"]), $trabajador, null, $fila["horasExtra"]), new Empresa(null, $fila["empresa"]), new Centro(null, $fila["centro"])];
+            }
+        }
         parent::desconectar($con);
-        return $respuesta;
+        return $partes;
     }
 
 }

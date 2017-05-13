@@ -2,5 +2,5 @@
 
 require_once __DIR__ .'/BusquedaViews.php';
 
-\Vista\Busqueda\BusquedaViews::busqueda();
+\Vista\Busqueda\BusquedaViews::principal();
 ?>

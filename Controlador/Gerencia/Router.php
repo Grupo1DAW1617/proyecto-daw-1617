@@ -461,19 +461,13 @@ if(isset($_POST['buscar'])){
             Controlador::incidencias($_POST);
             break;
         case "partesAnu":
-            Controlador::partesAnuales($_POST);
+            Controlador::partes($_POST);
             break;
         case "partesMen":
-            Controlador::partesMensuales($_POST);
+            Controlador::partes($_POST);
             break;
-        case "vacasApro":
-            Controlador::vacacionesAprobadas($_POST);
-            break;
-        case "vacasDis":
-            Controlador::vacacionesDisfrutadas($_POST);
-            break;
-        case "vacasSoli":
-            Controlador::vacacionesSolicitadas($_POST);
+        case "vacaciones":
+            Controlador::vacaciones($_POST);
             break;
     }
 }

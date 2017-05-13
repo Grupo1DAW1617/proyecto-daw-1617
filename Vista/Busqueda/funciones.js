@@ -3,19 +3,20 @@ function addFecha(v){
         $(document).ready(function(){
             $("#fecha div").remove();
             $("#fecha").append("<div class='col-sm-6'>" +
-                "<input type='date' name='fecha'/>" +
+                "<input type='date' name='fecha' required/>" +
                 "</div>");
+
         });
     }else{
         $(document).ready(function(){
             $("#fecha div").remove();
             $("#fecha").append("<div class='col-sm-4'>" +
                 "<label>Desde:</label>&nbsp;" +
-                "<input type='date' name='fechaIni'/>" +
+                "<input type='date' name='fechaIni' required/>" +
                 "</div>" +
                 "<div class='col-sm-4'>" +
                 "<label>Hasta:</label>" +
-                "<input type='date' name='fechaFin'/></div>");
+                "<input type='date' name='fechaFin' required/></div>");
         });
     }
 }
@@ -25,7 +26,7 @@ function recibir(u){
         url: u,
         type: "post",
         dataType: "text",
-        async:false
+        async: false
     }).responseText;
 
     return datos;
@@ -45,7 +46,7 @@ function recibirEnviando(d, u){
 
 $(document).ready(function(){
     $("[name=opEmp]").click(function(){
-        var datos = recibir("cargarEmpresas.php");
+        var datos = recibir("http://192.168.33.10/Vista/Busqueda/cargarEmpresas.php");
         $("#empresas div").remove();
         $("#empresas").append(datos);
 
@@ -89,7 +90,7 @@ function addCentro(){
 
     if(selected.length != 0){
         var array = JSON.stringify(selected);
-        var datos = recibirEnviando(array, "cargarCentros.php");
+        var datos = recibirEnviando(array, "http://192.168.33.10/Vista/Busqueda/cargarCentros.php");
         if(datos != ""){
             $("#estados div").remove();
             $("#trabajadores div").remove();
@@ -156,7 +157,7 @@ function addTrabajador(){
     if(selectedCen.length != 0 && selectedTipo.length != 0){
         var arrayBi = [selectedCen, selectedTipo];
         var array = JSON.stringify(arrayBi);
-        var datos = recibirEnviando(array, "cargarTrabajadores.php");
+        var datos = recibirEnviando(array, "http://192.168.33.10/Vista/Busqueda/cargarTrabajadores.php");
         if(datos != ""){
             $(".est [type=radio]").removeAttr("checked");
             $("#estados div").remove();
@@ -189,7 +190,7 @@ function addTrabajador(){
 
 function addTipoTrabajador(){
     $("#tiposTrabajadores div").remove();
-    var datos = recibir("cargarTiposTrabajadores.php");
+    var datos = recibir("http://192.168.33.10/Vista/Busqueda/cargarTiposTrabajadores.php");
     $("#tiposTrabajadores").append(datos);
     addTrabajador();
 
@@ -200,21 +201,67 @@ function addTipoTrabajador(){
             //$(".est").css("display", "inline");
         }else{
             $("#trabajadores div").remove();
+            $("#estados div").remove();
             $(".est").css("display", "none");
+
         }
         if($(".est input[name=opEstado]:radio").is(":checked")){
          $("#estados div").remove();
-         addEstado();
+         //addEstado();
          }
     };
     $(".ps input[type=checkbox]" ).on("click", countCheckedPer);
 }
 
 function addEstado(){
-    var datos = recibir("cargarEstados.php");
+    var datos = recibir("http://192.168.33.10/Vista/Busqueda/cargarEstados.php");
     $("#estados div").remove();
     $("#estados").append(datos);
 }
+
+function addEstadoVacas(){
+    $(document).ready(function(){
+        $("#estados div").remove();
+        $("#estados").append("<div class='col-sm-4'>" +
+        "<label>Aprobado:</label>&nbsp;" +
+        "<input type='checkbox' name='estado[]' value='A'/>" +
+        "</div>" +
+        "<div class='col-sm-4'>" +
+        "<label>Disfrutado:</label>&nbsp;" +
+        "<input type='checkbox' name='estado[]' value='D'/>" +
+        "</div>"+
+        "<div class='col-sm-4'>" +
+        "<label>Solicitado:</label>&nbsp;" +
+        "<input type='checkbox' name='estado[]' value='S'/>" +
+        "</div>");
+    });
+}
+
+function addEstadoVacasPrecon(){
+    $(document).ready(function(){
+        $("#estados div").remove();
+        $("#estados").append("<div class='col-sm-4'>" +
+            "<label>Previstas:</label>&nbsp;" +
+            "<input type='checkbox' name='estado[]' value='A'/>" +
+            "</div>" +
+            "<div class='col-sm-4'>" +
+            "<label>Consumidas:</label>&nbsp;" +
+            "<input type='checkbox' name='estado[]' value='D'/>" +
+            "</div>");
+    });
+}
+
+function validar(){
+    $(document).ready(function() {
+        var n = $(".es input[type=checkbox]:checked").length;
+        if (n < 1) {
+            smoke.signal('Debes seleccionar al menos una empresa', function (e) {
+                null;
+            }, {duration: 10000});
+        }
+    });
+}
+
 /*function addEmpresa(){
     $.getJSON("cargarEmpresas.php", function (data) {
         $.each(data, function(k, v) {

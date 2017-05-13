@@ -4,6 +4,13 @@
  * Anas
  */
 namespace Modelo\BD;
+use Controlador\Gerencia\Controlador;
+use Modelo\Base\Calendario;
+use Modelo\Base\Centro;
+use Modelo\Base\Empresa;
+use Modelo\Base\Estado;
+use Modelo\Base\VacacionesTrabajadores;
+
 require_once __DIR__."/GenericoBD.php";
 
 abstract class VacacionesTrabajadoresBD extends GenericoBD{
@@ -79,6 +86,77 @@ abstract class VacacionesTrabajadoresBD extends GenericoBD{
             parent::desconectar($con);
             return false;
         }
+    }
+
+    // Alejandra
+
+    public static function getVacaciones($ano, $fi, $ff, $emp, $cen, $tra, $est, $buscar){
+        $con = parent::conectar();
+        if($buscar == "vacaciones"){
+            if($ano != ""){                                                                                                     //desc es una palabra reservada: se tendria que poner ca.[desc] ????
+                $query = "SELECT e.nombre as 'empresa', c.nombre as 'centro', t.nombre, t.apellido1, t.apellido2, ca.desc as 'calendario', v.* FROM " .self::$tabla. " v, trabajadores t, centros c, empresas e, calendario ca WHERE v.dniTrabajador=t.dni AND  t.idCentro=c.id AND c.idEmpresa=e.id AND v.calendario_id=ca.id AND DATE(v.fecha)='$ano'";
+            }else{
+                $query = "SELECT e.nombre as 'empresa', c.nombre as 'centro', t.nombre, t.apellido1, t.apellido2, ca.desc as 'calendario', v.* FROM " .self::$tabla. " v, trabajadores t, centros c, empresas e, calendario ca WHERE v.dniTrabajador=t.dni AND  t.idCentro=c.id AND c.idEmpresa=e.id AND v.calendario_id=ca.id AND DATE(v.fecha) BETWEEN '$fi' AND '$ff'";
+            }
+        }else{
+            if($ano != ""){
+                $query = "SELECT e.nombre as 'empresa', c.nombre as 'centro', t.nombre, t.apellido1, t.apellido2, ca.desc as 'calendario', v.* FROM " .self::$tabla. " v, trabajadores t, centros c, empresas e, calendario ca WHERE v.dniTrabajador=t.dni AND  t.idCentro=c.id AND c.idEmpresa=e.id AND v.calendario_id=ca.id AND YEAR(v.fecha)='$ano'";
+            }else{
+                $query = "SELECT e.nombre as 'empresa', c.nombre as 'centro', t.nombre, t.apellido1, t.apellido2, ca.desc as 'calendario', v.* FROM " .self::$tabla. " v, trabajadores t, centros c, empresas e, calendario ca WHERE v.dniTrabajador=t.dni AND  t.idCentro=c.id AND c.idEmpresa=e.id AND v.calendario_id=ca.id AND YEAR(v.fecha) BETWEEN '$fi' AND '$ff'";
+            }
+        }
+
+        if($emp != "" && count($emp) != 0){
+            for($i=0; $i<count($emp); $i++){
+                if($i == 0){
+                    $query .= " AND e.id IN (".$emp[$i]->getId();
+                }else{
+                    $query .= ", " . $emp[$i]->getId();
+                }
+            }
+            $query .= ")";
+            if($cen != "" && count($cen) != 0){
+                for($i=0; $i<count($cen); $i++){
+                    if($i == 0){
+                        $query .= " AND c.id IN (".$cen[$i]->getId();
+                    }else{
+                        $query .= ", " . $cen[$i]->getId();
+                    }
+                }
+                $query .= ")";
+                if($tra != "" && count($tra) != 0){
+                    for($i=0; $i<count($tra); $i++){
+                        if($i == 0){
+                            $query .= " AND t.dni IN ('".$tra[$i]->getDni();
+                        }else{
+                            $query .= "', '" . $tra[$i]->getDni();
+                        }
+                    }
+                    $query .= "')";
+                    if($est != "" && count($est) != 0){
+                        for($i=0; $i<count($est); $i++){
+                            if($i == 0){
+                                $query .= " AND v.estado IN ('".$est[$i]->getTipo();
+                            }else{
+                                $query .= "', '" . $est[$i]->getTipo();
+                            }
+                        }
+                        $query .= "')";
+                    }
+                }
+            }
+        }
+        $query .= " ORDER BY e.nombre";
+        $rs = mysqli_query($con ,$query) or die(mysqli_error($con) . "Error getVacasTrab");
+        $vacaciones = [];
+        if (mysqli_num_rows($rs) != 0) {
+            while ($fila = mysqli_fetch_assoc($rs)) {
+                $trabajador =  Controlador::getTrabajador($fila["dniTrabajador"]);
+                $vacaciones = [new VacacionesTrabajadores($fila["id"], $trabajador, $fila["fecha"], $fila["horaInicio"], $fila["horaFin"], new Calendario(null, $fila["calendario"]), new Estado(null, $fila["estado"])), new Empresa(null, $fila["empresa"]), new Centro(null, $fila["centro"])];
+            }
+        }
+        parent::desconectar($con);
+        return $vacaciones;
     }
 
 }
