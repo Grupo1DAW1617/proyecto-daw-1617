@@ -15,6 +15,8 @@ require_once __DIR__."/GenericoBD.php";
 
 abstract class VacacionesTrabajadoresBD extends GenericoBD{
 
+    private static $tabla = "vacacionestrabajadores";
+
     public static function insertarVacacionesTrabajadores($vacacionesTrab){
 
         $con = parent::conectar();
