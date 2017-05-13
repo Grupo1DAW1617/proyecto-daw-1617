@@ -91,7 +91,9 @@ abstract class CalendarioBD extends GenericoBD   //Aitor
     }
 	public static function getCalendarioById($id){ //Ibai, cambiado de grupo 1 usando self::tabla
         $con = self::conectar();
-
+	//Aitor I el if.... parece que era ese if
+	if($id==null){$id = 1;} 
+	
         $query = "SELECT * FROM calendario WHERE id = ".$id;
 
         $rs = mysqli_query($con, $query) or die("Error getCalendarioById");
@@ -106,6 +108,8 @@ abstract class CalendarioBD extends GenericoBD   //Aitor
 
     public static function getAll(){ //Ibai, cambiado de grupo 1 usando self::tabla
         $con = self::conectar();
+	//Aitor I el if.... por si acaso
+	if($id==null){$id = 1;} 
 
         $query = "SELECT * FROM calendario";
 
