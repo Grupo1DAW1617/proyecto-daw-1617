@@ -46,6 +46,9 @@ require_once __DIR__."/../../Modelo/Base/FestivoClass.php";
 require_once __DIR__."/../../Modelo/Base/ViajeClass.php";
 require_once __DIR__."/../../Vista/Administracion/AdministracionViews.php";
 require_once __DIR__."/../../Vista/Administracion/Incidencias.php";
+//Alejandra
+require_once __DIR__ . "/../../Vista/Busqueda/BusquedaViews.php";
+require_once __DIR__ . "/../../Modelo/BD/VacacionesTrabajadoresBD.php";
 
 
 
@@ -886,7 +889,7 @@ abstract class Controlador{
         return $vacaciones;
     }
 
-    public static function obtenerVacaciones($ano, $fi, $ff, $emp, $cen, $tra, $est, $buscar){
+    public static function obtenerVacaciones($ano, $fi, $ff, $emp, $cen, $tra, $est, $buscar=""){
         return BD\VacacionesTrabajadoresBD::getVacaciones($ano, $fi, $ff, $emp, $cen, $tra, $est, $buscar);
     }
 
