@@ -118,6 +118,7 @@ ENGINE = MyISAM
 AUTO_INCREMENT = 21944
 DEFAULT CHARACTER SET = latin1;
 
+insert into himevico.calendario values(2017, "cal1", "a");
 
 -- -----------------------------------------------------
 -- Table `himevico`.`festivos`
@@ -757,6 +758,8 @@ CREATE TABLE IF NOT EXISTS `himevico`.`vacacionestrabajadores` (
     REFERENCES `himevico`.`trabajadores` (`dni`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+INSERT INTO `vacacionestrabajadores` (`id`,`dniTrabajador`,`fecha`,`horaInicio`,`horaFin`,`calendario_id`,`estado`) VALUES (1,'12345678G','2017-05-15 00:00:00','2017-05-15 00:00:00','2017-05-15 23:59:59',2017,'S');
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
