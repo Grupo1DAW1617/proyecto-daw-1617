@@ -335,8 +335,8 @@ abstract class BusquedaViews extends Views{
 
     public static function addFilaVacas($h){?>
         <tr>
-            <td><?php echo $_SESSION["vacaciones"][$h][0]->getTrabajador()->getDni(); ?></td>
-            <td><?php echo $_SESSION["vacaciones"][$h][0]->getTrabajador()->getNombre();?></td>
+            <td><?php echo $_SESSION["vacaciones"][$h][3]->getDni(); ?></td>
+            <td><?php echo $_SESSION["vacaciones"][$h][3]->getNombre();?></td>
             <td><?php echo $_SESSION["vacaciones"][$h][0]->getFecha();?></td>
             <td><?php echo $_SESSION["vacaciones"][$h][0]->getHoraInicio();?></td>
             <td><?php echo $_SESSION["vacaciones"][$h][0]->gethoraFin();?></td>

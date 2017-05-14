@@ -154,7 +154,8 @@ abstract class VacacionesTrabajadoresBD extends GenericoBD{
         if (mysqli_num_rows($rs) != 0) {
             while ($fila = mysqli_fetch_assoc($rs)) {
                 $trabajador =  Controlador::getTrabajador($fila["dniTrabajador"]);
-                $vacaciones = [new VacacionesTrabajadores($fila["id"], $trabajador, $fila["fecha"], $fila["horaInicio"], $fila["horaFin"], new Calendario(null, $fila["calendario"]), new Estado(null, $fila["estado"])), new Empresa(null, $fila["empresa"]), new Centro(null, $fila["centro"])];
+                //$vacaciones[] = [new VacacionesTrabajadores($fila["id"], $trabajador, $fila["fecha"], $fila["horaInicio"], $fila["horaFin"], new Calendario(null, $fila["calendario"]), new Estado(null, $fila["estado"])), new Empresa(null, $fila["empresa"]), new Centro(null, $fila["centro"])];
+                $vacaciones[] = [new VacacionesTrabajadores($fila["id"], null, $fila["fecha"], $fila["horaInicio"], $fila["horaFin"], new Calendario(null, $fila["calendario"]), new Estado(null, $fila["estado"])), new Empresa(null, $fila["empresa"]), new Centro(null, $fila["centro"]), $trabajador];
             }
         }
         parent::desconectar($con);
